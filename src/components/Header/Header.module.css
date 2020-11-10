@@ -1,13 +1,16 @@
 .header {
   grid-area: h;
-  background-color: lightskyblue;
+  background-color: lightslategrey;
   display: flex;
+  align-items: center;
 }
 
 .header2 {
   line-height: 60px;
+  padding-left: 20px;
 }
 
 .header img {
   width: 60px;
+  padding-left: 20px;
 }

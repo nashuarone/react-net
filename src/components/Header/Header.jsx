@@ -6,7 +6,7 @@ const Header = () => {
     <div className={s.header}>
       <header className={s.header1}>
         <img
-          src="https://c7.hotpng.com/preview/308/294/538/slack-technologies-logo-privately-held-company-others-thumbnail.jpg"
+          src="https://pngimage.net/wp-content/uploads/2018/06/flowers-logo-png-6.png"
           alt="default-logo"
         />
       </header>

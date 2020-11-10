@@ -4,6 +4,7 @@ import './App.css';
 import Dialogs from './components/Dialogs/Dialogs';
 import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
+import News from './components/News/News';
 import Profile from './components/Profile/Profile';
 
 function App() {
@@ -13,8 +14,9 @@ function App() {
         <Header />
         <Navbar />
         <div className="app-wrapper-content">
-          <Route path="/dialogs" component={Profile} />
-          <Route path="/profile" component={Dialogs} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/dialogs" component={Dialogs} />
+          <Route path="/news" component={News} />
         </div>
       </div>
     </BrowserRouter>
