@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Router } from 'react-router-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
 import './App.css';
 import Dialogs from './components/Dialogs/Dialogs';
 import Header from './components/Header/Header';
@@ -13,8 +13,8 @@ function App() {
         <Header />
         <Navbar />
         <div className="app-wrapper-content">
-          <Router path="/dialogs" component={Profile} />
-          <Router path="/profile" component={Dialogs} />
+          <Route path="/dialogs" component={Profile} />
+          <Route path="/profile" component={Dialogs} />
         </div>
       </div>
     </BrowserRouter>
