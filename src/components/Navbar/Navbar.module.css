@@ -17,3 +17,21 @@
   color: tomato;
   font-weight: bold;
 }
+
+.friends {
+  margin: 25px 0;
+}
+
+.friendsblock {
+  display: flex;
+}
+
+.friendsblock > div {
+  padding: 0 10px;
+}
+
+.friends img {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}

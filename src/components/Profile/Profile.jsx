@@ -5,13 +5,18 @@ import ProfileImg from './ProfileInfo/ProfileImg';
 import ProfileInfo from './ProfileInfo/ProfileInfo';
 
 
-const Profile = () => {
+const Profile = (props) => {
   return (
     <div>
       <ProfileImg />
       <div className={s.leftPad}>
         <ProfileInfo />
-        <Posts />
+        <Posts
+          postsData={props.profilePage.postsData}
+          newPostText={props.profilePage.newPostText}
+          updateNewPostText={props.updateNewPostText}
+          addPost={props.addPost}
+        />
       </div>
     </div>
   );

@@ -7,15 +7,27 @@ import Navbar from './components/Navbar/Navbar';
 import News from './components/News/News';
 import Profile from './components/Profile/Profile';
 
-function App() {
+function App(props) {
   return (
     <BrowserRouter>
       <div className="app-wrapper">
         <Header />
         <Navbar />
         <div className="app-wrapper-content">
-          <Route path="/profile" component={Profile} />
-          <Route path="/dialogs" component={Dialogs} />
+          <Route
+            path="/profile"
+            render={() => (
+              <Profile
+                profilePage={props.state.profilePage}
+                updateNewPostText={props.updateNewPostText}
+                addPost={props.addPost}
+              />
+            )}
+          />
+          <Route
+            path="/dialogs"
+            render={() => <Dialogs dialogsPage={props.state.dialogsPage} />}
+          />
           <Route path="/news" component={News} />
         </div>
       </div>

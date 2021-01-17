@@ -26,6 +26,25 @@ const Navbar = () => {
       <div className={s.item}>
         <a href="s.com">Settings</a>
       </div>
+      <div className={s.friends}>
+        <h3>Friends</h3>
+        <div className={s.friendsblock}>
+          <div>
+            <img
+              src="https://media.gettyimages.com/vectors/human-face-avatar-icon-profile-for-social-network-man-vector-vector-id1227618765"
+              alt=""
+            />
+            <p>Pups</p>
+          </div>
+          <div>
+            <img
+              src="https://media.gettyimages.com/vectors/human-face-avatar-icon-profile-for-social-network-man-vector-vector-id1227618765"
+              alt=""
+            />
+            <p>Keks</p>
+          </div>
+        </div>
+      </div>
     </nav>
   );
 }
