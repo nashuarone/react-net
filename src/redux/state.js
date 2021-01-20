@@ -1,6 +1,5 @@
-import { rerenderEntireTree } from "../render";
-
-export let state = {
+let store = {
+  _state: {
   profilePage: {
     postsData: [
       { id: 1, message: "first post!", likesCount: 12 },
@@ -20,26 +19,49 @@ export let state = {
       { id: 2, message: "How are you???" },
     ]
   }
-};
+  },
+  _callSubscriber() {
+    console.log('do you need state?')
+  },
 
-window.state = state;
+  getState() {
+    return this._state
+  },
+  subscribe(observer) {
+    this._callSubscriber = observer;
+  },
 
-export let addPost = () => {
-  let newPost = {
-    id: 4,
-    message: state.profilePage.newPostText,
-    likesCount: 0
-  };
-  state.profilePage.postsData.push(newPost)
-  state.profilePage.newPostText = "";
-  // debugger
-  rerenderEntireTree(state);
+  addPost() {
+    let newPost = {
+      id: 4,
+      message: this._state.profilePage.newPostText,
+      likesCount: 0,
+    };
+    this._state.profilePage.postsData.push(newPost);
+    this._state.profilePage.newPostText = "";
+    this._callSubscriber(this._state);
+  },
+  updateNewPostText(text) {
+    this._state.profilePage.newPostText = text;
+    this._callSubscriber(this._state);
+  },
+  dispatch(action) {
+    if (action.type === 'ADD-POST') {
+      let newPost = {
+        id: 4,
+        message: this._state.profilePage.newPostText,
+        likesCount: 0,
+      };
+      this._state.profilePage.postsData.push(newPost);
+      this._state.profilePage.newPostText = "";
+      this._callSubscriber(this._state);
+    } else if (action.type === 'UPDATE-NEW-POST-TEXT') {
+      this._state.profilePage.newPostText = action.text;
+      this._callSubscriber(this._state);
+    }
+  }
 }
 
-export let updateNewPostText = (text) => {
-  state.profilePage.newPostText = text;
-  // debugger
-  rerenderEntireTree(state);
-};
+window.store = store;
 
-// export default state
+export default store

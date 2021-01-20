@@ -18,12 +18,14 @@ const Posts = (props) => {
   let newTextElement = React.createRef();
 
   let addPostUI = () => {
-    props.addPost();
+    //props.addPost();
+    props.dispatch({ type: "ADD-POST" });
   }
 
   let newPostUI = () => {
     let postMessageUI = newTextElement.current.value;
-    props.updateNewPostText(postMessageUI);
+    //props.updateNewPostText(postMessageUI);
+    props.dispatch({ type: "UPDATE-NEW-POST-TEXT", text: postMessageUI });
   }
 
   return (
