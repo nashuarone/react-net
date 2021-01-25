@@ -1,7 +1,7 @@
 const SEND_MESSAGE = "SEND-MESSAGE";
 const UPDATE_MESSAGE_TEXT = "UPDATE-MESSAGE-TEXT";
 
-// else if zarefactori v switch pozhaluista pozzhe
+// else if zarefactori v switch pozhaluista pozzhe - sebe govoryu
 
 const dialogsReducer = (state_d, action) => {
   if (action.type === SEND_MESSAGE) {
