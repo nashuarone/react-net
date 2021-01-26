@@ -1,13 +1,13 @@
 import React from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 import './App.css';
-import Dialogs from './components/Dialogs/Dialogs';
+import DialogsContainer from './components/Dialogs/DialogsContainer';
 import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
 import News from './components/News/News';
 import Profile from './components/Profile/Profile';
 
-function App(props) {
+function App() {
   return (
     <BrowserRouter>
       <div className="app-wrapper">
@@ -17,21 +17,13 @@ function App(props) {
           <Route
             path="/profile"
             render={() => (
-              <Profile
-                profilePage={props.state.profilePage}
-                dispatch={props.dispatch}
-                // updateNewPostText={props.updateNewPostText}
-                // addPost={props.addPost}
-              />
+              <Profile />
             )}
           />
           <Route
             path="/dialogs"
             render={() => (
-              <Dialogs
-                dialogsPage={props.state.dialogsPage}
-                dispatch={props.dispatch}
-              />
+              <DialogsContainer />
             )}
           />
           <Route path="/news" component={News} />
