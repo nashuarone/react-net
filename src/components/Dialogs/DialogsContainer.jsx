@@ -1,36 +1,30 @@
 import React from "react";
+import { connect } from "react-redux";
 import {
   sendMessageActionCreator,
   updateMessageTextActionCreator,
 } from "../../redux/dialogsReducer";
-import StoreContext from "../../StoreContext";
 import Dialogs from './Dialogs'
 
-const DialogsContainer = () => {
-  return (
-    <StoreContext.Consumer>
-      {
-        store => {
-          let dialogsPage = store.getState().dialogsPage;
+const mapStateToProps = (state) => {
+  return {
+    dialogsData: state.dialogsPage.dialogsData,
+    messagesData: state.dialogsPage.messagesData,
+    newMessageText: state.dialogsPage.newMessageText
+  }
+}
 
-          let onSendMessage = () => {
-            store.dispatch(sendMessageActionCreator());
-          };
+const mapDispatchToProps = (dispatch) => {
+  return {
+    newMessage: (body) => {
+      dispatch(updateMessageTextActionCreator(body));
+    },
+    sendMessage: () => {
+      dispatch(sendMessageActionCreator())
+    }
+  };
+}
 
-          let onNewMessage = (body) => {
-            store.dispatch(updateMessageTextActionCreator(body));
-          };
-          return <Dialogs
-            newMessage={onNewMessage}
-            sendMessage={onSendMessage}
-            dialogsData={dialogsPage.dialogsData}
-            messagesData={dialogsPage.messagesData}
-            newMessageText={dialogsPage.newMessageText}
-          />
-        }
-      }
-    </StoreContext.Consumer>
-  );
-};
+const DialogsContainer = connect(mapStateToProps, mapDispatchToProps)(Dialogs);
 
 export default DialogsContainer;
