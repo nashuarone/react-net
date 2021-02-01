@@ -1,0 +1,7 @@
+.userItem {
+  display: flex;
+}
+
+.photosize img {
+  width: 150px;
+}
