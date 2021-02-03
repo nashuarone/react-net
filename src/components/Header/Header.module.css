@@ -14,3 +14,9 @@
   width: 60px;
   padding-left: 20px;
 }
+
+.loginBlock {
+  line-height: 60px;
+  margin: 0 20px 0 auto;
+  color: white;
+}

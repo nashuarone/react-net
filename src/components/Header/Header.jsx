@@ -11,6 +11,7 @@ const Header = () => {
         />
       </header>
       <div className={s.header2}>Header text</div>
+      <div className={s.loginBlock}>Login</div>
     </div>
   );
 }
