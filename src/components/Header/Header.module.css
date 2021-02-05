@@ -18,5 +18,10 @@
 .loginBlock {
   line-height: 60px;
   margin: 0 20px 0 auto;
+  color: tomato;
+  font-weight: bold;
+}
+.loginBlock a {
   color: white;
+  text-decoration: none;
 }
