@@ -31,18 +31,19 @@ const Users = (props) => {
         <div className={s.userItem} key={u.id}>
           <div>
             <div className={s.photosize}>
-              <NavLink to={'/profile/' + u.id}>
+              <NavLink to={"/profile/" + u.id}>
                 <img
-                alt="avatar"
-                src={u.photos.small === null ? userPhoto : u.photos.small}
-              />
+                  alt="avatar"
+                  src={u.photos.small === null ? userPhoto : u.photos.small}
+                />
               </NavLink>
-
             </div>
             <div>
               {u.followed ? (
                 <button
+                  disabled={props.isFollowFetching.some(id => id === u.id)}
                   onClick={() => {
+                    props.toggleIsFollowingButtons(true, u.id);
                     axios
                       .delete(
                         `https://social-network.samuraijs.com/api/1.0/follow/${u.id}`,
@@ -54,6 +55,7 @@ const Users = (props) => {
                         }
                       )
                       .then((res) => {
+                        props.toggleIsFollowingButtons(false, u.id);
                         if (res.data.resultCode === 0) {
                           props.unfollow(u.id);
                         }
@@ -64,18 +66,26 @@ const Users = (props) => {
                 </button>
               ) : (
                 <button
+                  disabled={props.isFollowFetching.some(id => id === u.id)}
                   onClick={() => {
+                    props.toggleIsFollowingButtons(true, u.id);
                     axios
                       .post(
                         `https://social-network.samuraijs.com/api/1.0/follow/${u.id}`,
                         {},
-                        { withCredentials: true, headers: {"API-KEY": "f91d3b30-b7d1-49f0-9fe1-21f35cccd421" }}
+                        {
+                          withCredentials: true,
+                          headers: {
+                            "API-KEY": "f91d3b30-b7d1-49f0-9fe1-21f35cccd421",
+                          },
+                        }
                       )
                       .then((res) => {
+                        props.toggleIsFollowingButtons(false, u.id);
                         if (res.data.resultCode === 0) {
                           props.follow(u.id);
                         }
-                      })
+                      });
                   }}
                 >
                   Follow
