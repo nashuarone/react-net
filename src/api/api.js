@@ -11,5 +11,13 @@ export const usersAPI = {
     return axiosInstanse
       .get(`users?page=${pageNum}&count=${pageSize}`)
       .then((res) => res.data)
+  },
+  follow(userId) {
+    return axiosInstanse
+      .post(`follow/${userId}`);
+  },
+  unfollow(userId) {
+    return axiosInstanse
+      .delete(`follow/${userId}`);
   }
 }

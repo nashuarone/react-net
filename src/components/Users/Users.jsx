@@ -1,6 +1,5 @@
 import React from 'react'
 import { NavLink } from "react-router-dom";
-import * as axios from "axios";
 import s from "./Users.module.css";
 import userPhoto from '../../assets/images/userPhoto.png'
 
@@ -43,23 +42,7 @@ const Users = (props) => {
                 <button
                   disabled={props.isFollowFetching.some(id => id === u.id)}
                   onClick={() => {
-                    props.toggleIsFollowingButtons(true, u.id);
-                    axios
-                      .delete(
-                        `https://social-network.samuraijs.com/api/1.0/follow/${u.id}`,
-                        {
-                          withCredentials: true,
-                          headers: {
-                            "API-KEY": "f91d3b30-b7d1-49f0-9fe1-21f35cccd421",
-                          },
-                        }
-                      )
-                      .then((res) => {
-                        props.toggleIsFollowingButtons(false, u.id);
-                        if (res.data.resultCode === 0) {
-                          props.unfollow(u.id);
-                        }
-                      });
+                    props.unfollow(u.id);
                   }}
                 >
                   Unfollow
@@ -68,24 +51,7 @@ const Users = (props) => {
                 <button
                   disabled={props.isFollowFetching.some(id => id === u.id)}
                   onClick={() => {
-                    props.toggleIsFollowingButtons(true, u.id);
-                    axios
-                      .post(
-                        `https://social-network.samuraijs.com/api/1.0/follow/${u.id}`,
-                        {},
-                        {
-                          withCredentials: true,
-                          headers: {
-                            "API-KEY": "f91d3b30-b7d1-49f0-9fe1-21f35cccd421",
-                          },
-                        }
-                      )
-                      .then((res) => {
-                        props.toggleIsFollowingButtons(false, u.id);
-                        if (res.data.resultCode === 0) {
-                          props.follow(u.id);
-                        }
-                      });
+                    props.follow(u.id)
                   }}
                 >
                   Follow
