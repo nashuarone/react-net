@@ -1,9 +1,9 @@
 import React from 'react'
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import * as axios from 'axios'
 import Profile from './Profile'
-import { setUserProfile } from '../../redux/profileReducer'
+import { getUserProfile } from "../../redux/profileReducer";
+import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 
 class ProfileContainer extends React.Component {
 
@@ -12,16 +12,11 @@ class ProfileContainer extends React.Component {
     if (!userId) {
       userId = 14629
     }
-    axios
-      .get(
-        `https://social-network.samuraijs.com/api/1.0/profile/` + userId
-      )
-      .then((res) => {
-        this.props.setUserProfile(res.data);
-      });
+    this.props.getUserProfile(userId);
   }
 
   render() {
+    //if (!this.props.isAuth) return <Redirect to='/login' />
     return <Profile {...this.props} profile={this.props.profile} />
   }
 }
@@ -30,6 +25,17 @@ let mapStateToProps = (state) => ({
     profile: state.profilePage.profile,
   })
 
-let ContainerWithUserData = withRouter(ProfileContainer);
+// let AuthRedirectComponent = (props) => {
+//   if (!props.isAuth) return <Redirect to="/login" />;
+//   return <ProfileContainer {...props} />
+// }
 
-export default connect(mapStateToProps, { setUserProfile })(ContainerWithUserData);
+// часть стейта с isAuth вынесли в самодельный HOC withAuthRedirect и передали в ещё один connect внутри Хока
+
+let withRedirect = withAuthRedirect(ProfileContainer); //можно просто обернуть весь connect в withAuthRedirect
+
+let ContainerWithUserData = withRouter(withRedirect); //при этом не забыть уже сюда засунуть ProfileContainer
+
+export default connect(mapStateToProps, { getUserProfile })(
+  ContainerWithUserData
+);

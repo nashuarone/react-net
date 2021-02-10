@@ -104,7 +104,6 @@ export const getUsers = (pageNm, pageSz) => {
     });
   }
 }
-
 export const follow = (userID) => {
   return (dispatch) => {
     dispatch(toggleIsFollowingButtons(true, userID));
@@ -116,7 +115,6 @@ export const follow = (userID) => {
     });
   }
 };
-
 export const unfollow = (userID) => {
   return (dispatch) => {
     dispatch(toggleIsFollowingButtons(true, userID));

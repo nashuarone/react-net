@@ -10,14 +10,21 @@ export const usersAPI = {
   getUsers(pageNum, pageSize) {
     return axiosInstanse
       .get(`users?page=${pageNum}&count=${pageSize}`)
-      .then((res) => res.data)
+      .then((res) => res.data);
   },
   follow(userId) {
-    return axiosInstanse
-      .post(`follow/${userId}`);
+    return axiosInstanse.post(`follow/${userId}`);
   },
   unfollow(userId) {
-    return axiosInstanse
-      .delete(`follow/${userId}`);
+    return axiosInstanse.delete(`follow/${userId}`);
+  },
+  getProfile(userId) {
+    return axiosInstanse.get(`profile/` + userId);
+  },
+};
+
+export const authAPI = {
+  me() {
+    return axiosInstanse.get(`auth/me`);
   }
 }
