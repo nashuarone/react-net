@@ -1,4 +1,5 @@
 import React from 'react'
+import { compose } from 'redux';
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Profile from './Profile'
@@ -30,12 +31,8 @@ let mapStateToProps = (state) => ({
 //   return <ProfileContainer {...props} />
 // }
 
-// часть стейта с isAuth вынесли в самодельный HOC withAuthRedirect и передали в ещё один connect внутри Хока
-
-let withRedirect = withAuthRedirect(ProfileContainer); //можно просто обернуть весь connect в withAuthRedirect
-
-let ContainerWithUserData = withRouter(withRedirect); //при этом не забыть уже сюда засунуть ProfileContainer
-
-export default connect(mapStateToProps, { getUserProfile })(
-  ContainerWithUserData
-);
+export default compose(
+  connect(mapStateToProps, { getUserProfile }),
+  withRouter,
+  withAuthRedirect
+)(ProfileContainer);

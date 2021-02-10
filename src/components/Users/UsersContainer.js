@@ -1,4 +1,5 @@
 import React from "react";
+import { compose } from "redux";
 import { connect } from 'react-redux'
 import {
   follow,
@@ -7,6 +8,7 @@ import {
 } from "../../redux/usersReducer";
 import Users from './Users'
 import Preloader from '../../components/Common/Preloader'
+import { withAuthRedirect } from "../../hoc/withAuthRedirect";
 
 class UsersAPIcomponent extends React.Component {
   componentDidMount() {
@@ -47,8 +49,11 @@ let mapStateToProps = (state) => {
   };
 }
 
-export default connect(mapStateToProps, {
-  follow,
-  unfollow,
-  getUsers
-})(UsersAPIcomponent);
+export default compose(
+  connect(mapStateToProps, {
+    follow,
+    unfollow,
+    getUsers,
+  }),
+  withAuthRedirect
+)(UsersAPIcomponent);
