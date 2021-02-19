@@ -1,7 +1,5 @@
 const SEND_MESSAGE = "SEND-MESSAGE";
-const UPDATE_MESSAGE_TEXT = "UPDATE-MESSAGE-TEXT";
-
-// else if zarefactori v switch pozhaluista pozzhe - sebe govoryu
+// refactoring v switch - done
 
 let initialState = {
   dialogsData: [
@@ -12,35 +10,28 @@ let initialState = {
   messagesData: [
     { id: 1, message: "Hi, edreniy!" },
     { id: 2, message: "How are you???" },
-  ],
-  newMessageText: "",
+  ]
 };
 
 const dialogsReducer = (state_d = initialState, action) => {
-  if (action.type === SEND_MESSAGE) {
-    let newMessage = {
-      id: 3,
-      message: state_d.newMessageText,
-    };
-    return {
-      ...state_d,
-      messagesData: [...state_d.messagesData, newMessage],
-      newMessageText: ''
-    };
-  } else if (action.type === UPDATE_MESSAGE_TEXT) {
-    return {
-      ...state_d,
-      newMessageText: action.message
-    }
+  switch (action.type) {
+    case SEND_MESSAGE:
+      let newMessage = {
+        id: 3,
+        message: action.newDialogMessage,
+      };
+      return {
+        ...state_d,
+        messagesData: [...state_d.messagesData, newMessage],
+      };
+    default:
+      return state_d
   }
-  return state_d
 }
 
-export const sendMessageActionCreator = () => ({ type: SEND_MESSAGE });
-
-export const updateMessageTextActionCreator = (newMessageUI) => ({
-  type: UPDATE_MESSAGE_TEXT,
-  message: newMessageUI,
+export const sendMessageActionCreator = (newDialogMessage) => ({
+  type: SEND_MESSAGE,
+  newDialogMessage,
 });
 
 export default dialogsReducer;

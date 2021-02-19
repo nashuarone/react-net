@@ -1,0 +1,8 @@
+.mainLoginForm {
+  margin: 20px;
+}
+.checkBoxFlex {
+  display: flex;
+  line-height: 18px;
+  padding: 5px 0;
+}

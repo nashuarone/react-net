@@ -1,7 +1,26 @@
 import React from 'react'
+import { Field, reduxForm } from 'redux-form';
 import Post from './Post/Post';
 import s from "./Posts.module.css";
 
+const PostForm = (props) => {
+  return (
+    <form onSubmit={props.handleSubmit} className={s.posts}>
+      <Field
+        placeholder={"Ща запощу чё-нить..."}
+        name={"newPostText"}
+        component={"textarea"}
+      ></Field>
+      <div>
+        <button>Add post</button>
+      </div>
+    </form>
+  );
+}
+
+const PostReduxForm = reduxForm({
+  form: "WallPost",
+})(PostForm);
 
 const Posts = (props) => {
 
@@ -15,32 +34,25 @@ const Posts = (props) => {
     <Post message={it.message} likesCount={it.likesCount} />
   ));
 
-  let newTextElement = React.createRef();
+  // let newTextElement = React.createRef();
+  // let addPostUI = () => {
+  //   props.addPost();
+  //   //props.dispatch(addPostActionCreator());
+  // }
+  // let newPostUI = () => {
+  //   let postMessageUI = newTextElement.current.value;
+  //   //props.updateNewPostText(postMessageUI);
+  //   props.newPost(postMessageUI);
+  // }
 
-  let addPostUI = () => {
-    props.addPost();
-    //props.dispatch(addPostActionCreator());
-  }
-
-  let newPostUI = () => {
-    let postMessageUI = newTextElement.current.value;
-    //props.updateNewPostText(postMessageUI);
-    props.newPost(postMessageUI);
-  }
+  let addPostRF = (PostText) => {
+    props.addPost(PostText.newPostText);
+  };
 
   return (
     <div>
       <h3>My posts</h3>
-      <div className={s.posts}>
-        <textarea
-          onChange={newPostUI}
-          ref={newTextElement}
-          value={props.newPostText}
-        ></textarea>
-        <div>
-          <button onClick={addPostUI}>Add post</button>
-        </div>
-      </div>
+      <PostReduxForm onSubmit={addPostRF} />
       <div className={s.postBlock}>{postElements}</div>
     </div>
   );
