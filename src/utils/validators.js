@@ -11,8 +11,8 @@ export const maxLengthCreator = (maxLength) => (value) => {
 }
 
 export const minLengthCreator = (minLength) => (value) => {
-  if (value.length < minLength) {
-    return `Слишком простой пароль`;
+  if (value.length <= minLength) {
+    return `Низкая надёжность пароля`;
   }
   return undefined;
 };

@@ -34,10 +34,25 @@ export const profileAPI = {
   updateStatus(status) {
     return axiosInstanse.put(`profile/status`, { status: status });
   },
+  savePhoto(photoFile) {
+    const formData = new FormData()
+    formData.append("image", photoFile)
+    return axiosInstanse.put(`profile/photo`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
 };
 
 export const authAPI = {
   me() {
     return axiosInstanse.get(`auth/me`);
-  }
-}
+  },
+  login(email, password, rememberMe) {
+    return axiosInstanse.post(`auth/login`, { email, password, rememberMe });
+  },
+  logout() {
+    return axiosInstanse.delete(`auth/login`);
+  },
+};
