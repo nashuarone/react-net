@@ -9,7 +9,7 @@ import Navbar from './components/Navbar/Navbar';
 import News from './components/News/News';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import UsersContainer from './components/Users/UsersContainer';
-import { initializeApp } from './redux/appReducer';
+import { initializeApp } from './redux/appReducerTS.ts';
 import Preloader from './components/Common/Preloader';
 
 function App() {
