@@ -1,19 +1,30 @@
 const SEND_MESSAGE = "SEND-MESSAGE";
 // refactoring v switch - done
 
+type DialogType = {
+  id: number
+  name: string
+}
+type MessageType = {
+  id: number;
+  message: string;
+};
+
 let initialState = {
   dialogsData: [
     { id: 1, name: "Pupsik" },
     { id: 2, name: "Baby" },
     { id: 3, name: "Alyosha" },
-  ],
+  ] as Array<DialogType>,
   messagesData: [
     { id: 1, message: "Hi, edreniy!" },
     { id: 2, message: "How are you???" },
-  ]
+  ] as Array<MessageType>,
 };
 
-const dialogsReducer = (state_d = initialState, action) => {
+export type InitialStateType = typeof initialState
+
+const dialogsReducer = (state_d = initialState, action: any) => {
   switch (action.type) {
     case SEND_MESSAGE:
       let newMessage = {
@@ -29,7 +40,13 @@ const dialogsReducer = (state_d = initialState, action) => {
   }
 }
 
-export const sendMessageActionCreator = (newDialogMessage) => ({
+type SendMessageActionCreatorType = {
+  type: typeof SEND_MESSAGE
+  newDialogMessage: string
+};
+export const sendMessageActionCreator = (
+  newDialogMessage: string
+): SendMessageActionCreatorType => ({
   type: SEND_MESSAGE,
   newDialogMessage,
 });
