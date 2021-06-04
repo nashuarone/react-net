@@ -2,11 +2,15 @@ import { getUserAuthData } from "./authReducer";
 
 const SET_INITIALIZED = "SET_INITIALIZED";
 
-let initialState = {
+export type InitialStateType = {
+  initialized: boolean,
+};
+
+let initialState: InitialStateType = {
   initialized: false,
 };
 
-const appReducer = (state_a = initialState, action) => {
+const appReducer = (state_a = initialState, action: any): InitialStateType => {
   switch (action.type) {
     case SET_INITIALIZED:
       return {
@@ -16,11 +20,17 @@ const appReducer = (state_a = initialState, action) => {
     default:
       return state_a;
   }
-}
+};
 
-export const setInitialized = () => ({type: SET_INITIALIZED});
+type SetInitializedActionType = {
+  type: typeof SET_INITIALIZED;
+};
 
-export const initializeApp = () => (dispatch) => {
+export const setInitialized = (): SetInitializedActionType => ({
+  type: SET_INITIALIZED,
+});
+
+export const initializeApp = () => (dispatch: any) => {
   let promise = dispatch(getUserAuthData());
   promise.then(() => {
     dispatch(setInitialized());

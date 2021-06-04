@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { BrowserRouter, Redirect, Route } from 'react-router-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux";
 import './App.css';
 import DialogsContainer from './components/Dialogs/DialogsContainer';
@@ -29,9 +29,8 @@ function App() {
           <Route exact path="/profile/:userId?" render={() => <ProfileContainer />} />
           <Route path="/dialogs" render={() => <DialogsContainer />} />
           <Route path="/news" component={News} />
-          <Route path="/users" render={() => <UsersContainer />} />
+          <Route path="/users" render={() => <UsersContainer pageTitle={"Пользователи"} />} />
           <Route path="/login" render={() => <Login />} />
-          <Redirect to="/profile" />
         </div>
       </div>
     </BrowserRouter>}

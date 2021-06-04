@@ -2,10 +2,22 @@ import React from 'react'
 import { NavLink } from "react-router-dom";
 import s from "./Users.module.css";
 import userPhoto from '../../assets/images/userPhoto.png'
+import { UserType } from '../../types/types';
 
-const Users = (props) => {
+type PropsType = {
+  users: Array<UserType>;
+  totalCount: number;
+  pageSize: number;
+  currentPage: number;
+  isFollowFetching: Array<number>;
+  setPage: (pageNumber: number) => void;
+  follow: (userId: number) => void;
+  unfollow: (userId: number) => void;
+};
+
+const Users: React.FC<PropsType> = (props) => {
   let pageNumber = Math.ceil(props.totalCount / props.pageSize);
-  let pages = [];
+  let pages: Array<number> = [];
   for (let i = 1; i <= pageNumber; i++) {
     pages.push(i);
   }
@@ -19,7 +31,7 @@ const Users = (props) => {
                 props.setPage(p);
               }}
             >
-              <span className={props.currentPage === p && s.selectedPage}>
+              <span className={props.currentPage === p ? s.selectedPage : ""}>
                 {p}
               </span>
             </button>

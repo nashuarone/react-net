@@ -1,14 +1,7 @@
-const SEND_MESSAGE = "SEND-MESSAGE";
+import { DialogType, MessageType } from "../types/types";
 // refactoring v switch - done
 
-type DialogType = {
-  id: number
-  name: string
-}
-type MessageType = {
-  id: number;
-  message: string;
-};
+const SEND_MESSAGE = "SEND-MESSAGE";
 
 let initialState = {
   dialogsData: [

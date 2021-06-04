@@ -1,4 +1,5 @@
 import { usersAPI } from "../api/api";
+import { UserType } from "../types/types";
 
 const UNFOLLOW = "UNFOLLOW";
 const FOLLOW = "FOLLOW";
@@ -9,15 +10,17 @@ const TOGGLE_IS_FETCHING = "TOGGLE_IS_FETCHING";
 const TOGGLE_IS_FOLLOWING_BUTTONS = "TOGGLE_IS_FOLLOWING_BUTTONS";
 
 let initialState = {
-  users: [],
+  users: [] as Array<UserType>,
   pageSize: 10,
   totalCount: 0,
   currentPage: 1,
   isFetching: true,
-  isFollowFetching: []
+  isFollowFetching: [] as Array<number> //array of users ids
 };
 
-const userReducer = (state_u = initialState, action) => {
+export type InitialStateType = typeof initialState
+
+const userReducer = (state_u = initialState, action: any) => {
   switch (action.type) {
     case FOLLOW:
       return {
@@ -72,42 +75,87 @@ const userReducer = (state_u = initialState, action) => {
   }
 }
 
-export const followSucces = (userId) => ({ type: FOLLOW, userId });
-export const unfollowSucces = (userId) => ({
+type FollowSuccesActionType = {
+  type: typeof FOLLOW;
+  userId: number
+};
+export const followSucces = (userId: number): FollowSuccesActionType => ({
+  type: FOLLOW,
+  userId,
+});
+type UnfollowSuccesActionType = {
+  type: typeof UNFOLLOW;
+  userId: number
+};
+export const unfollowSucces = (userId: number): UnfollowSuccesActionType => ({
   type: UNFOLLOW,
   userId,
 });
-export const setUsers = (users) => ({ type: SET_USERS, users })
-export const setCurrentPage = (pageNumber) => ({ type: SET_CURRENT_PAGE, pageNumber });
-export const setTotalUsersCount = (totalCount) => ({
+type SetUsersActionType = {
+  type: typeof SET_USERS;
+  users: Array<UserType>
+};
+export const setUsers = (users: Array<UserType>): SetUsersActionType => ({
+  type: SET_USERS,
+  users,
+});
+type SetCurrentPageActionType = {
+  type: typeof SET_CURRENT_PAGE;
+  pageNumber: number;
+};
+export const setCurrentPage = (pageNumber: number): SetCurrentPageActionType => ({
+  type: SET_CURRENT_PAGE,
+  pageNumber,
+});
+type SetTotalUsersCountActionType = {
+  type: typeof SET_TOTAL_USERS_COUNT;
+  totalCount: number;
+};
+export const setTotalUsersCount = (
+  totalCount: number
+): SetTotalUsersCountActionType => ({
   type: SET_TOTAL_USERS_COUNT,
   totalCount,
 });
-export const toggleIsFetching = (fetchingStatus) => ({
+type ToggleIsFetchingActionType = {
+  type: typeof TOGGLE_IS_FETCHING;
+  fetchingStatus: boolean;
+};
+export const toggleIsFetching = (
+  fetchingStatus: boolean
+): ToggleIsFetchingActionType => ({
   type: TOGGLE_IS_FETCHING,
   fetchingStatus,
 });
-export const toggleIsFollowingButtons = (fetchingButtonStatus, userId) => ({
+type ToggleIsFollowingButtonsActionType = {
+  type: typeof TOGGLE_IS_FOLLOWING_BUTTONS,
+  fetchingButtonStatus: boolean
+  userId: number
+}
+export const toggleIsFollowingButtons = (
+  fetchingButtonStatus: boolean,
+  userId: number
+): ToggleIsFollowingButtonsActionType => ({
   type: TOGGLE_IS_FOLLOWING_BUTTONS,
   fetchingButtonStatus,
-  userId
+  userId,
 });
 
-export const getUsers = (pageNm, pageSz) => {
-  return (dispatch) => {
+export const getUsers = (pageNm: number, pageSz: number) => {
+  return (dispatch: any) => {
     dispatch(toggleIsFetching(true))
     dispatch(setCurrentPage(pageNm))
-    usersAPI.getUsers(pageNm, pageSz).then((data) => {
+    usersAPI.getUsers(pageNm, pageSz).then((data: any) => {
       dispatch(toggleIsFetching(false))
       dispatch(setUsers(data.items))
       dispatch(setTotalUsersCount(data.totalCount))
     });
   }
 }
-export const follow = (userID) => {
-  return (dispatch) => {
+export const follow = (userID: number) => {
+  return (dispatch: any) => {
     dispatch(toggleIsFollowingButtons(true, userID));
-    usersAPI.follow(userID).then((res) => {
+    usersAPI.follow(userID).then((res: any) => {
       dispatch(toggleIsFollowingButtons(false, userID))
       if (res.data.resultCode === 0) {
         dispatch(followSucces(userID))
@@ -115,10 +163,10 @@ export const follow = (userID) => {
     });
   }
 };
-export const unfollow = (userID) => {
-  return (dispatch) => {
+export const unfollow = (userID: number) => {
+  return (dispatch: any) => {
     dispatch(toggleIsFollowingButtons(true, userID));
-    usersAPI.unfollow(userID).then((res) => {
+    usersAPI.unfollow(userID).then((res: any) => {
       dispatch(toggleIsFollowingButtons(false, userID));
       if (res.data.resultCode === 0) {
         dispatch(unfollowSucces(userID));

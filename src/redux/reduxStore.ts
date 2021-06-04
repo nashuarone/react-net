@@ -5,7 +5,7 @@ import authReducer from "./authReducer";
 import dialogsReducer from "./dialogsReducer";
 import profileReducer from "./profileReducer";
 import usersReduser from './usersReducer'
-import appReducerTS from "./appReducerTS";
+import appReducer from "./appReducer";
 
 let reducers = combineReducers({
   profilePage: profileReducer,
@@ -13,11 +13,15 @@ let reducers = combineReducers({
   usersPage: usersReduser,
   auth: authReducer,
   form: formReducer,
-  app: appReducerTS,
+  app: appReducer,
 });
+
+type RedusersType = typeof reducers
+export type AppStateType = ReturnType<RedusersType>;
 
 let store = createStore(reducers, applyMiddleware(thunkMiddleware));
 
+//@ts-ignore
 window.store = store //для дебага, потом удалить
 
 export default store
