@@ -1,4 +1,6 @@
+import { ThunkAction } from "redux-thunk";
 import { authAPI } from "../api/api";
+import { AppStateType } from "./reduxStore";
 
 const SET_USER_AUTH_DATA = "SET_USER_AUTH_DATA";
 const TOGGLE_IS_LOGIN_BUTTON = "TOGGLE_IS_LOGIN_BUTTON";
@@ -19,7 +21,10 @@ let initialState: InitialStateType = {
   isFetching: false,
 };
 
-const authReducer = (state_a = initialState, action: any): InitialStateType => {
+const authReducer = (
+  state_a = initialState,
+  action: ActionTypes
+): InitialStateType => {
   switch (action.type) {
     case SET_USER_AUTH_DATA:
       return {
@@ -35,6 +40,8 @@ const authReducer = (state_a = initialState, action: any): InitialStateType => {
       return state_a;
   }
 };
+
+type ActionTypes = SetUserAuthDataActionType | toggleIsLoginButtonActionType
 
 type SetUserAuthDataActionPayloadType = {
   userId: number | null
@@ -66,33 +73,40 @@ export const toggleIsLoginButton = (
   fetchingStatus,
 });
 
-export const getUserAuthData = () => (dispatch: any) => {
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>;
+
+export const getUserAuthData = (): ThunkType => (dispatch) => {
   return authAPI.me().then((res: any) => {
     if (res.data.resultCode === 0) {
       let { id, email, login } = res.data.data;
-      dispatch(setUserAuthData(id, email, login, true))
+      dispatch(setUserAuthData(id, email, login, true));
     }
   });
+};
+export const login = (email: string, password: string, rememberMe: boolean): ThunkType => {
+  return async (dispatch) => {
+    dispatch(toggleIsLoginButton(true));
+    authAPI.login(email, password, rememberMe).then((res: any) => {
+      dispatch(toggleIsLoginButton(false));
+      if (res.data.resultCode === 0) {
+        dispatch(getUserAuthData());
+      } else {
+        alert("email или пароль не совпадают");
+      }
+    });
+  };
 }
-export const login = (email: string, password: string, rememberMe: boolean) => (dispatch: any) => {
-  dispatch(toggleIsLoginButton(true));
-  authAPI.login(email, password, rememberMe).then((res: any) => {
-    dispatch(toggleIsLoginButton(false));
-    if (res.data.resultCode === 0) {
-      dispatch(getUserAuthData());
-    } else {
-      alert("email или пароль не совпадают")
-    }
-  });
-};
-export const logout = () => (dispatch: any) => {
-  dispatch(toggleIsLoginButton(true));
-  authAPI.logout().then((res: any) => {
-    dispatch(toggleIsLoginButton(false));
-    if (res.data.resultCode === 0) {
-      dispatch(setUserAuthData(null, null, null, false));
-    }
-  });
-};
+
+export const logout = (): ThunkType => {
+  return async (dispatch) => {
+    dispatch(toggleIsLoginButton(true));
+    authAPI.logout().then((res: any) => {
+      dispatch(toggleIsLoginButton(false));
+      if (res.data.resultCode === 0) {
+        dispatch(setUserAuthData(null, null, null, false));
+      }
+    });
+  };
+}
 
 export default authReducer;

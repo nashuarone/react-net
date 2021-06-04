@@ -14,7 +14,7 @@ type MapStatePropsType = {
 type MapDispatchPropsType = {
   sendMessage: (newDialogMessage: string) => void;
 };
-type PropsType = MapStatePropsType & MapDispatchPropsType
+export type PropsType = MapStatePropsType & MapDispatchPropsType
 
 const mapStateToProps = (state: AppStateType) => {
   return {
@@ -24,9 +24,9 @@ const mapStateToProps = (state: AppStateType) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
-    sendMessage: (newDialogMessage) => {
+    sendMessage: (newDialogMessage: string) => {
       dispatch(sendMessageActionCreator(newDialogMessage));
     },
   };
