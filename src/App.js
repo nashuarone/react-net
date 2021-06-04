@@ -9,7 +9,7 @@ import Navbar from './components/Navbar/Navbar';
 import News from './components/News/News';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import UsersContainer from './components/Users/UsersContainer';
-import { initializeApp } from './redux/appReducerTS.ts';
+import { initializeApp } from './redux/appReducer';
 import Preloader from './components/Common/Preloader';
 
 function App() {
@@ -26,10 +26,11 @@ function App() {
         <HeaderContainer />
         <Navbar />
         <div className="app-wrapper-content">
+          <Route exact path="/" render={() => <Login />} />
           <Route exact path="/profile/:userId?" render={() => <ProfileContainer />} />
           <Route path="/dialogs" render={() => <DialogsContainer />} />
           <Route path="/news" component={News} />
-          <Route path="/users" render={() => <UsersContainer pageTitle={"Пользователи"} />} />
+          <Route path="/users" render={() => <UsersContainer pageTitle={"Users"} />} />
           <Route path="/login" render={() => <Login />} />
         </div>
       </div>

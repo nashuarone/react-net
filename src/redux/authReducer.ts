@@ -1,5 +1,5 @@
 import { ThunkAction } from "redux-thunk";
-import { authAPI } from "../api/api";
+import { authAPI, ResultCodeEnum } from "../api/api";
 import { AppStateType } from "./reduxStore";
 
 const SET_USER_AUTH_DATA = "SET_USER_AUTH_DATA";
@@ -76,9 +76,9 @@ export const toggleIsLoginButton = (
 type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>;
 
 export const getUserAuthData = (): ThunkType => (dispatch) => {
-  return authAPI.me().then((res: any) => {
-    if (res.data.resultCode === 0) {
-      let { id, email, login } = res.data.data;
+  return authAPI.me().then((meData) => {
+    if (meData.resultCode === ResultCodeEnum.Success) {
+      let { id, email, login } = meData.data;
       dispatch(setUserAuthData(id, email, login, true));
     }
   });
@@ -86,9 +86,9 @@ export const getUserAuthData = (): ThunkType => (dispatch) => {
 export const login = (email: string, password: string, rememberMe: boolean): ThunkType => {
   return async (dispatch) => {
     dispatch(toggleIsLoginButton(true));
-    authAPI.login(email, password, rememberMe).then((res: any) => {
+    authAPI.login(email, password, rememberMe).then((res) => {
       dispatch(toggleIsLoginButton(false));
-      if (res.data.resultCode === 0) {
+      if (res.data.resultCode === ResultCodeEnum.Success) {
         dispatch(getUserAuthData());
       } else {
         alert("email или пароль не совпадают");
@@ -100,9 +100,9 @@ export const login = (email: string, password: string, rememberMe: boolean): Thu
 export const logout = (): ThunkType => {
   return async (dispatch) => {
     dispatch(toggleIsLoginButton(true));
-    authAPI.logout().then((res: any) => {
+    authAPI.logout().then((res) => {
       dispatch(toggleIsLoginButton(false));
-      if (res.data.resultCode === 0) {
+      if (res.data.resultCode === ResultCodeEnum.Success) {
         dispatch(setUserAuthData(null, null, null, false));
       }
     });

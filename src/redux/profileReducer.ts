@@ -1,4 +1,4 @@
-import { usersAPI, profileAPI } from "../api/api";
+import { usersAPI, profileAPI, ResultCodeEnum } from "../api/api";
 import { PhotosType, PostType, ProfileType } from "../types/types";
 
 const ADD_POST = "ADD-POST";
@@ -75,24 +75,24 @@ export const savePhotoSucsess = (photos: PhotosType): SavePhotoSucsessType => ({
 });
 
 export const getUserProfile = (userId: number) => (dispatch: any) => {
-  usersAPI.getProfile(userId).then((res: any) => {
+  usersAPI.getProfile(userId).then((res) => {
     dispatch(setUserProfile(res.data));
   });
 };
 export const getUserStatus = (userId: number) => (dispatch: any) => {
-  profileAPI.getStatus(userId).then((res: any) => {
+  profileAPI.getStatus(userId).then((res) => {
     dispatch(setUserStatus(res.data));
   });
 };
 export const updateUserStatus = (status: string) => (dispatch: any) => {
-  profileAPI.updateStatus(status).then((res: any) => {
-    if (res.data.resultCode === 0) {
+  profileAPI.updateStatus(status).then((res) => {
+    if (res.data.resultCode === ResultCodeEnum.Success) {
       dispatch(setUserStatus(status));
     }
   });
 };
 export const savePhoto = (photoFile: any) => (dispatch: any) => {
-  profileAPI.savePhoto(photoFile).then((res: any) => {
+  profileAPI.savePhoto(photoFile).then((res) => {
     dispatch(savePhotoSucsess(res.data.data.photos));
   });
 };

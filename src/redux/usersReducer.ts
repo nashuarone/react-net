@@ -1,6 +1,6 @@
 //import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { usersAPI } from "../api/api";
+import { ResultCodeEnum, usersAPI } from "../api/api";
 import { UserType } from "../types/types";
 import { AppStateType } from "./reduxStore";
 
@@ -160,7 +160,7 @@ export const getUsers = (pageNm: number, pageSz: number): ThunkType => {
   return async (dispatch) => {
     dispatch(toggleIsFetching(true));
     dispatch(setCurrentPage(pageNm));
-    usersAPI.getUsers(pageNm, pageSz).then((data: any) => {
+    usersAPI.getUsers(pageNm, pageSz).then((data) => {
       dispatch(toggleIsFetching(false));
       dispatch(setUsers(data.items));
       dispatch(setTotalUsersCount(data.totalCount));
@@ -170,9 +170,9 @@ export const getUsers = (pageNm: number, pageSz: number): ThunkType => {
 export const follow = (userID: number): ThunkType => {
   return async (dispatch) => {
     dispatch(toggleIsFollowingButtons(true, userID));
-    usersAPI.follow(userID).then((res: any) => {
+    usersAPI.follow(userID).then((res) => {
       dispatch(toggleIsFollowingButtons(false, userID))
-      if (res.data.resultCode === 0) {
+      if (res.data.resultCode === ResultCodeEnum.Success) {
         dispatch(followSucces(userID))
       }
     });
@@ -183,7 +183,7 @@ export const unfollow = (userID: number): ThunkType => {
     dispatch(toggleIsFollowingButtons(true, userID));
     usersAPI.unfollow(userID).then((res: any) => {
       dispatch(toggleIsFollowingButtons(false, userID));
-      if (res.data.resultCode === 0) {
+      if (res.data.resultCode === ResultCodeEnum.Success) {
         dispatch(unfollowSucces(userID));
       }
     });
