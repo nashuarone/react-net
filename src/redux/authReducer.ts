@@ -1,5 +1,6 @@
 import { ThunkAction } from "redux-thunk";
-import { authAPI, ResultCodeEnum } from "../api/api";
+import { authAPI } from "../api/auth-api";
+import { ResultCodeEnum } from "../api/api";
 import { AppStateType } from "./reduxStore";
 
 const SET_USER_AUTH_DATA = "SET_USER_AUTH_DATA";
@@ -86,9 +87,9 @@ export const getUserAuthData = (): ThunkType => (dispatch) => {
 export const login = (email: string, password: string, rememberMe: boolean): ThunkType => {
   return async (dispatch) => {
     dispatch(toggleIsLoginButton(true));
-    authAPI.login(email, password, rememberMe).then((res) => {
+    authAPI.login(email, password, rememberMe).then((data) => {
       dispatch(toggleIsLoginButton(false));
-      if (res.data.resultCode === ResultCodeEnum.Success) {
+      if (data.resultCode === ResultCodeEnum.Success) {
         dispatch(getUserAuthData());
       } else {
         alert("email или пароль не совпадают");

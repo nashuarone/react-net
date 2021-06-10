@@ -10,10 +10,10 @@ import { Field, reduxForm } from 'redux-form';
       <form onSubmit={props.handleSubmit}>
         <div>
           <Field
-          placeholder="Type a message..."
-          name={"newDialogMessage"}
-          component={"textarea"}
-        ></Field>
+            placeholder="Type a message..."
+            name={"newDialogMessage"}
+            component={"textarea"}
+          ></Field>
         </div>
         <div>
           <button>Отправить</button>

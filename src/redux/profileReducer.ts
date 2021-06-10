@@ -1,4 +1,5 @@
-import { usersAPI, profileAPI, ResultCodeEnum } from "../api/api";
+import { profileAPI } from "../api/profile-api";
+import { ResultCodeEnum } from "../api/api";
 import { PhotosType, PostType, ProfileType } from "../types/types";
 
 const ADD_POST = "ADD-POST";
@@ -16,7 +17,7 @@ let initialState = {
   status: "",
 };
 
-export type InitialStateType = typeof initialState
+export type InitialStateType = typeof initialState;
 
 const profileReducer = (state_p = initialState, action: any) => {
   switch (action.type) {
@@ -36,15 +37,18 @@ const profileReducer = (state_p = initialState, action: any) => {
     case SET_USER_STATUS:
       return { ...state_p, status: action.status };
     case SAVE_PHOTO_SUCSESS:
-      return { ...state_p, profile: {...state_p.profile, photos: action.photos} };
+      return {
+        ...state_p,
+        profile: { ...state_p.profile, photos: action.photos },
+      };
     default:
       return state_p;
   }
-}
+};
 
 type addPostActionCreatorType = {
-  type: typeof ADD_POST
-  newPostText: string
+  type: typeof ADD_POST;
+  newPostText: string;
 };
 export const addPostActionCreator = (
   newPostText: string
@@ -59,7 +63,7 @@ export const setUserProfile = (profile: ProfileType): SetUserProfileType => ({
 });
 type SetUserStatusType = {
   type: typeof SET_USER_STATUS;
-  status: string
+  status: string;
 };
 export const setUserStatus = (status: string): SetUserStatusType => ({
   type: SET_USER_STATUS,
@@ -75,25 +79,25 @@ export const savePhotoSucsess = (photos: PhotosType): SavePhotoSucsessType => ({
 });
 
 export const getUserProfile = (userId: number) => (dispatch: any) => {
-  usersAPI.getProfile(userId).then((res) => {
-    dispatch(setUserProfile(res.data));
+  profileAPI.getProfile(userId).then((data) => {
+    dispatch(setUserProfile(data));
   });
 };
 export const getUserStatus = (userId: number) => (dispatch: any) => {
-  profileAPI.getStatus(userId).then((res) => {
-    dispatch(setUserStatus(res.data));
+  profileAPI.getStatus(userId).then((status) => {
+    dispatch(setUserStatus(status));
   });
 };
 export const updateUserStatus = (status: string) => (dispatch: any) => {
-  profileAPI.updateStatus(status).then((res) => {
-    if (res.data.resultCode === ResultCodeEnum.Success) {
+  profileAPI.updateStatus(status).then((data) => {
+    if (data.resultCode === ResultCodeEnum.Success) {
       dispatch(setUserStatus(status));
     }
   });
 };
 export const savePhoto = (photoFile: any) => (dispatch: any) => {
-  profileAPI.savePhoto(photoFile).then((res) => {
-    dispatch(savePhotoSucsess(res.data.data.photos));
+  profileAPI.savePhoto(photoFile).then((data) => {
+    dispatch(savePhotoSucsess(data.data.photos));
   });
 };
 
