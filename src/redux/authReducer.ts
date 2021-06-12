@@ -1,23 +1,14 @@
-import { ThunkAction } from "redux-thunk";
 import { authAPI } from "../api/auth-api";
 import { ResultCodeEnum } from "../api/api";
-import { AppStateType } from "./reduxStore";
+import { BaseThunkType, InferActionsTypes } from "./reduxStore";
 
-const SET_USER_AUTH_DATA = "SET_USER_AUTH_DATA";
-const TOGGLE_IS_LOGIN_BUTTON = "TOGGLE_IS_LOGIN_BUTTON";
+const SET_USER_AUTH_DATA = "SN/AUTH/SET_USER_AUTH_DATA";
+const TOGGLE_IS_LOGIN_BUTTON = "SN/AUTH/TOGGLE_IS_LOGIN_BUTTON";
 
-export type InitialStateType = {
-  userId: number | null;
-  email: string | null;
-  login: string | null;
-  isAuth: boolean;
-  isFetching: boolean;
-};
-
-let initialState: InitialStateType = {
-  userId: null,
-  email: null,
-  login: null,
+let initialState = {
+  userId: null as number | null,
+  email: null as string | null,
+  login: null as string | null,
   isAuth: false,
   isFetching: false,
 };
@@ -42,53 +33,42 @@ const authReducer = (
   }
 };
 
-type ActionTypes = SetUserAuthDataActionType | toggleIsLoginButtonActionType
+// type SetUserAuthDataActionPayloadType = {
+//   userId: number | null
+//   email: string | null
+//   login: string | null
+//   isAuth: boolean;
+// };
 
-type SetUserAuthDataActionPayloadType = {
-  userId: number | null
-  email: string | null
-  login: string | null
-  isAuth: boolean;
-};
-type SetUserAuthDataActionType = {
-  type: typeof SET_USER_AUTH_DATA;
-  payload: SetUserAuthDataActionPayloadType;
-};
-export const setUserAuthData = (
-  userId: number | null,
-  email: string | null,
-  login: string | null,
-  isAuth: boolean
-): SetUserAuthDataActionType => ({
-  type: SET_USER_AUTH_DATA,
-  payload: { userId, email, login, isAuth },
-});
-type toggleIsLoginButtonActionType = {
-  type: typeof TOGGLE_IS_LOGIN_BUTTON;
-  fetchingStatus: boolean
-};
-export const toggleIsLoginButton = (
-  fetchingStatus: boolean
-): toggleIsLoginButtonActionType => ({
-  type: TOGGLE_IS_LOGIN_BUTTON,
-  fetchingStatus,
-});
+const actions = {
+  setUserAuthData: (
+    userId: number | null,
+    email: string | null,
+    login: string | null,
+    isAuth: boolean
+  ) => ({
+    type: SET_USER_AUTH_DATA,
+    payload: { userId, email, login, isAuth },
+  } as const),
+  toggleIsLoginButton: (fetchingStatus: boolean) => ({
+    type: TOGGLE_IS_LOGIN_BUTTON,
+    fetchingStatus,
+  } as const),
+}
 
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionTypes>;
-
-export const getUserAuthData = (): ThunkType => (dispatch) => {
+export const getUserAuthData = (): ThunkType => async (dispatch) => {
   return authAPI.me().then((meData) => {
     if (meData.resultCode === ResultCodeEnum.Success) {
       let { id, email, login } = meData.data;
-      dispatch(setUserAuthData(id, email, login, true));
+      dispatch(actions.setUserAuthData(id, email, login, true));
     }
   });
 };
 export const login = (email: string, password: string, rememberMe: boolean): ThunkType => {
   return async (dispatch) => {
-    dispatch(toggleIsLoginButton(true));
+    dispatch(actions.toggleIsLoginButton(true));
     authAPI.login(email, password, rememberMe).then((data) => {
-      dispatch(toggleIsLoginButton(false));
+      dispatch(actions.toggleIsLoginButton(false));
       if (data.resultCode === ResultCodeEnum.Success) {
         dispatch(getUserAuthData());
       } else {
@@ -100,14 +80,18 @@ export const login = (email: string, password: string, rememberMe: boolean): Thu
 
 export const logout = (): ThunkType => {
   return async (dispatch) => {
-    dispatch(toggleIsLoginButton(true));
+    dispatch(actions.toggleIsLoginButton(true));
     authAPI.logout().then((res) => {
-      dispatch(toggleIsLoginButton(false));
+      dispatch(actions.toggleIsLoginButton(false));
       if (res.data.resultCode === ResultCodeEnum.Success) {
-        dispatch(setUserAuthData(null, null, null, false));
+        dispatch(actions.setUserAuthData(null, null, null, false));
       }
     });
   };
 }
 
 export default authReducer;
+
+export type InitialStateType = typeof initialState;
+type ActionTypes = InferActionsTypes<typeof actions>;
+type ThunkType = BaseThunkType<ActionTypes>;

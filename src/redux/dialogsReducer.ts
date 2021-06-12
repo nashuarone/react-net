@@ -1,4 +1,5 @@
 import { DialogType, MessageType } from "../types/types";
+import { InferActionsTypes } from "./reduxStore";
 // refactoring v switch - done
 
 const SEND_MESSAGE = "SEND-MESSAGE";
@@ -15,9 +16,7 @@ let initialState = {
   ] as Array<MessageType>,
 };
 
-export type InitialStateType = typeof initialState
-
-const dialogsReducer = (state_d = initialState, action: any) => {
+const dialogsReducer = (state_d = initialState, action: ActionTypes) => {
   switch (action.type) {
     case SEND_MESSAGE:
       let newMessage = {
@@ -33,15 +32,14 @@ const dialogsReducer = (state_d = initialState, action: any) => {
   }
 }
 
-type SendMessageActionCreatorType = {
-  type: typeof SEND_MESSAGE
-  newDialogMessage: string
-};
-export const sendMessageActionCreator = (
-  newDialogMessage: string
-): SendMessageActionCreatorType => ({
-  type: SEND_MESSAGE,
-  newDialogMessage,
-});
+export const actions = {
+  sendMessage: (newDialogMessage: string) => ({
+    type: SEND_MESSAGE,
+    newDialogMessage,
+  })
+}
 
 export default dialogsReducer;
+
+export type InitialStateType = typeof initialState
+type ActionTypes = InferActionsTypes<typeof actions>;

@@ -1,11 +1,12 @@
 import { profileAPI } from "../api/profile-api";
 import { ResultCodeEnum } from "../api/api";
 import { PhotosType, PostType, ProfileType } from "../types/types";
+import { BaseThunkType, InferActionsTypes } from "./reduxStore";
 
-const ADD_POST = "ADD-POST";
-const SET_USER_PROFILE = "SET_USER_PROFILE";
-const SET_USER_STATUS = "SET_USER_STATUS";
-const SAVE_PHOTO_SUCSESS = "SAVE_PHOTO_SUCSESS";
+const ADD_POST = "SN/PROFILE/ADD-POST";
+const SET_USER_PROFILE = "SN/PROFILE/SET_USER_PROFILE";
+const SET_USER_STATUS = "SN/PROFILE/SET_USER_STATUS";
+const SAVE_PHOTO_SUCSESS = "SN/PROFILE/SAVE_PHOTO_SUCSESS";
 
 let initialState = {
   postsData: [
@@ -17,9 +18,7 @@ let initialState = {
   status: "",
 };
 
-export type InitialStateType = typeof initialState;
-
-const profileReducer = (state_p = initialState, action: any) => {
+const profileReducer = (state_p = initialState, action: ActionTypes): InitialStateType => {
   switch (action.type) {
     case ADD_POST: {
       let newPost = {
@@ -39,66 +38,54 @@ const profileReducer = (state_p = initialState, action: any) => {
     case SAVE_PHOTO_SUCSESS:
       return {
         ...state_p,
-        profile: { ...state_p.profile, photos: action.photos },
+        profile: { ...state_p.profile, photos: action.photos } as ProfileType,
       };
     default:
       return state_p;
   }
 };
 
-type addPostActionCreatorType = {
-  type: typeof ADD_POST;
-  newPostText: string;
-};
-export const addPostActionCreator = (
-  newPostText: string
-): addPostActionCreatorType => ({ type: ADD_POST, newPostText });
-type SetUserProfileType = {
-  type: typeof SET_USER_PROFILE;
-  profile: ProfileType;
-};
-export const setUserProfile = (profile: ProfileType): SetUserProfileType => ({
-  type: SET_USER_PROFILE,
-  profile,
-});
-type SetUserStatusType = {
-  type: typeof SET_USER_STATUS;
-  status: string;
-};
-export const setUserStatus = (status: string): SetUserStatusType => ({
-  type: SET_USER_STATUS,
-  status,
-});
-type SavePhotoSucsessType = {
-  type: typeof SAVE_PHOTO_SUCSESS;
-  photos: PhotosType;
-};
-export const savePhotoSucsess = (photos: PhotosType): SavePhotoSucsessType => ({
-  type: SAVE_PHOTO_SUCSESS,
-  photos,
-});
+export const actions = {
+  addPost: (newPostText: string) => ({ type: ADD_POST, newPostText } as const),
+  setUserProfile: (profile: ProfileType) => ({
+    type: SET_USER_PROFILE,
+    profile,
+  } as const),
+  setUserStatus: (status: string) => ({
+    type: SET_USER_STATUS,
+    status,
+  } as const),
+  savePhotoSucsess: (photos: PhotosType) => ({
+    type: SAVE_PHOTO_SUCSESS,
+    photos,
+  } as const),
+}
 
-export const getUserProfile = (userId: number) => (dispatch: any) => {
+export const getUserProfile = (userId: number): ThunkType => async (dispatch) => {
   profileAPI.getProfile(userId).then((data) => {
-    dispatch(setUserProfile(data));
+    dispatch(actions.setUserProfile(data));
   });
 };
-export const getUserStatus = (userId: number) => (dispatch: any) => {
+export const getUserStatus = (userId: number): ThunkType => async (dispatch) => {
   profileAPI.getStatus(userId).then((status) => {
-    dispatch(setUserStatus(status));
+    dispatch(actions.setUserStatus(status));
   });
 };
-export const updateUserStatus = (status: string) => (dispatch: any) => {
+export const updateUserStatus = (status: string): ThunkType => async (dispatch) => {
   profileAPI.updateStatus(status).then((data) => {
     if (data.resultCode === ResultCodeEnum.Success) {
-      dispatch(setUserStatus(status));
+      dispatch(actions.setUserStatus(status));
     }
   });
 };
-export const savePhoto = (photoFile: any) => (dispatch: any) => {
+export const savePhoto = (photoFile: any): ThunkType => async (dispatch) => {
   profileAPI.savePhoto(photoFile).then((data) => {
-    dispatch(savePhotoSucsess(data.data.photos));
+    dispatch(actions.savePhotoSucsess(data.data.photos));
   });
 };
 
 export default profileReducer;
+
+export type InitialStateType = typeof initialState;
+type ActionTypes = InferActionsTypes<typeof actions>
+type ThunkType = BaseThunkType<ActionTypes>;

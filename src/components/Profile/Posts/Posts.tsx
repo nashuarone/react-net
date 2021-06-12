@@ -1,9 +1,23 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form';
+import { Field, InjectedFormProps, reduxForm } from 'redux-form';
+import { PostType } from '../../../types/types';
 import Post from './Post/Post';
 import s from "./Posts.module.css";
 
-const PostForm = (props) => {
+type PropsType = {}
+export type MapStatePropsType = {
+  postsData: Array<PostType>
+};
+export type MapDispatchPropsType = {
+  addPost: (newPostText: string) => void;
+};
+type AddPostFormValuesType = {
+  newPostText: string;
+};
+
+const PostForm: React.FC<
+  InjectedFormProps<AddPostFormValuesType, PropsType> & PropsType
+> = (props) => {
   return (
     <form onSubmit={props.handleSubmit} className={s.posts}>
       <Field
@@ -16,36 +30,19 @@ const PostForm = (props) => {
       </div>
     </form>
   );
-}
+};
 
-const PostReduxForm = reduxForm({
+const PostReduxForm = reduxForm<AddPostFormValuesType, PropsType>({
   form: "WallPost",
 })(PostForm);
 
-const Posts = (props) => {
-
-  // let postsData = [
-  //   { id: 1, message: "first post!", likesCount: 12 },
-  //   { id: 2, message: "Give me more likes", likesCount: 23 },
-  //   { id: 3, message: "Durofff verni stenu!!!", likesCount: 1 }
-  // ];
+const Posts: React.FC<MapStatePropsType & MapDispatchPropsType> = (props) => {
 
   let postElements = props.postsData.map((it) => (
     <Post message={it.message} likesCount={it.likesCount} />
   ));
 
-  // let newTextElement = React.createRef();
-  // let addPostUI = () => {
-  //   props.addPost();
-  //   //props.dispatch(addPostActionCreator());
-  // }
-  // let newPostUI = () => {
-  //   let postMessageUI = newTextElement.current.value;
-  //   //props.updateNewPostText(postMessageUI);
-  //   props.newPost(postMessageUI);
-  // }
-
-  let addPostRF = (PostText) => {
+  let addPostRF = (PostText: AddPostFormValuesType) => {
     props.addPost(PostText.newPostText);
   };
 

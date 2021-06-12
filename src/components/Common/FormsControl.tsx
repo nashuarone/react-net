@@ -1,7 +1,16 @@
 import React from "react"
+import { WrappedFieldMetaProps, WrappedFieldProps } from "redux-form";
 import s from "./FormsControl.module.css"
 
-export const Input = ({input, meta, ...props}) => {
+type FormControlPropsType = {
+  meta: WrappedFieldMetaProps
+};
+
+export const Input: React.FC<FormControlPropsType & WrappedFieldProps> = ({
+  input,
+  meta,
+  ...props
+}) => {
   const hasError = meta.touched && meta.error;
   const hasLengthError = !meta.touched && meta.error !== "Обязательное поле";
   return (
@@ -21,4 +30,6 @@ export const Input = ({input, meta, ...props}) => {
         : hasError && <span>{meta.error}</span>}
     </div>
   );
-}
+};
+
+export type GetStringKeys<T> = Extract<keyof T, string>
