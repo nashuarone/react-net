@@ -18,7 +18,7 @@ let initialState = {
   pageSize: 10,
   totalCount: 0,
   currentPage: 1,
-  isFetching: true,
+  isFetching: false,
   isFollowFetching: [] as Array<number> //array of users ids
 };
 
@@ -80,7 +80,7 @@ const userReducer = (
   }
 };
 
-const actions = {
+export const actions = {
   followSucces: (userId: number) => ({ type: FOLLOW, userId } as const),
   unfollowSucces: (userId: number) => ({ type: UNFOLLOW, userId } as const),
   setUsers: (users: Array<UserType>) => ({
@@ -113,7 +113,7 @@ export const getUsers = (pageNm: number, pageSz: number): ThunkType => {
   return async (dispatch) => {
     dispatch(actions.toggleIsFetching(true));
     dispatch(actions.setCurrentPage(pageNm));
-    usersAPI.getUsers(pageNm, pageSz).then((data) => {
+    await usersAPI.getUsers(pageNm, pageSz).then((data) => {
       dispatch(actions.toggleIsFetching(false));
       dispatch(actions.setUsers(data.items));
       dispatch(actions.setTotalUsersCount(data.totalCount));
@@ -124,22 +124,22 @@ export const follow = (userID: number): ThunkType => {
   return async (dispatch) => {
     dispatch(actions.toggleIsFollowingButtons(true, userID));
     usersAPI.follow(userID).then((data) => {
-      dispatch(actions.toggleIsFollowingButtons(false, userID))
       if (data.resultCode === ResultCodeEnum.Success) {
         dispatch(actions.followSucces(userID))
       }
+      dispatch(actions.toggleIsFollowingButtons(false, userID))
     });
   }
 };
 export const unfollow = (userID: number): ThunkType => {
   return async (dispatch) => {
     dispatch(actions.toggleIsFollowingButtons(true, userID));
-    usersAPI.unfollow(userID).then((res: any) => {
-      dispatch(actions.toggleIsFollowingButtons(false, userID));
-      if (res.data.resultCode === ResultCodeEnum.Success) {
-        dispatch(actions.unfollowSucces(userID));
+    usersAPI.unfollow(userID).then((data) => {
+      dispatch(actions.toggleIsFollowingButtons(false, userID))
+      if (data.resultCode === ResultCodeEnum.Success) {
+        dispatch(actions.unfollowSucces(userID))
       }
-    });
+    })
   };
 };
 
